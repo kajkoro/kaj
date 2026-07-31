@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+:root {
+  /* ---- Color tokens: inspired by Dhaka rickshaw-art signage ---- */
+  --paper: #fbf8f2;
+  --ink: #171512;
+  --cobalt: #1b3a6b;
+  --cobalt-deep: #10233f;
+  --marigold: #f4a825;
+  --marigold-deep: #c67e0f;
+  --vermillion: #c0392b;
+  --leaf: #2e7d4f;
+  --line: #e7e0d1;
+  --card: #ffffff;
+
+  --font-display: var(--font-hind-siliguri);
+  --font-body: var(--font-noto-bengali);
+  --font-mono: var(--font-space-grotesk);
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+h1, h2, h3, .display {
+  font-family: var(--font-display), system-ui, sans-serif;
+}
+
+.mono-ui {
+  font-family: var(--font-mono), monospace;
+}
+
+:focus-visible {
+  outline: 3px solid var(--marigold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---- Signature element: ticket-stub job card ---- */
+.ticket {
+  position: relative;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+}
+
+.ticket::before,
+.ticket::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.ticket::before {
+  left: -10px;
+}
+
+.ticket::after {
+  right: -10px;
+}
+
+.ticket-perforation {
+  border-left: 2px dashed var(--ink);
+}
+
+.input {
+  width: 100%;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 0.65rem 0.9rem;
+  background: var(--card);
+  font-size: 0.95rem;
+}
+
+.input:focus {
+  border-color: var(--cobalt);
+  outline: none;
+}
+
+.btn-primary {
+  background: var(--cobalt);
+  color: white;
+  border-radius: 999px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+}
+
+.rickshaw-strip {
+  height: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--marigold) 0px,
+    var(--marigold) 24px,
+    var(--vermillion) 24px,
+    var(--vermillion) 48px,
+    var(--cobalt) 48px,
+    var(--cobalt) 72px
+  );
+}
