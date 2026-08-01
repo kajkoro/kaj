@@ -30,7 +30,9 @@ npm run dev
    where id = (select id from auth.users where email = 'you@example.com');
    ```
    এরপর `/admin` এ গিয়ে অ্যাডমিন প্যানেল দেখতে পাবেন।
+3গ. **`supabase/migrations/003_auto_create_profile.sql` অবশ্যই রান করুন** — এটা ছাড়া সাইনআপ করার সময় "new row violates row-level security policy" এরর আসবে। কারণ: Supabase-এ ইমেইল কনফার্মেশন চালু থাকলে সাইনআপের সাথে সাথে সেশন তৈরি হয় না, তাই ফ্রন্টএন্ড থেকে সরাসরি প্রোফাইল insert করা যায় না। এই migration একটা ডেটাবেস ট্রিগার বসিয়ে দেয় যেটা `auth.users`-এ নতুন ইউজার তৈরি হওয়ার সাথে সাথে automatically `profiles` রো বানিয়ে দেয় (RLS বাইপাস করে, নিরাপদভাবে)।
 4. **Authentication → Providers** এ Email প্রোভাইডার এনাবল আছে কিনা কনফার্ম করুন (ডিফল্টে থাকে)
+4ক. *(ঐচ্ছিক, টেস্টিং সহজ করার জন্য)* **Authentication → Providers → Email** এ "Confirm email" টগলটা বন্ধ রাখলে সাইনআপ করার সাথে সাথেই লগইন সেশন তৈরি হবে, ইমেইল কনফার্ম করার অপেক্ষা করতে হবে না। প্রোডাকশনে সাধারণত এটা চালু রাখা ভালো (স্প্যাম অ্যাকাউন্ট ঠেকাতে), কিন্তু লোকাল টেস্টিংয়ে বন্ধ রাখলে সুবিধা।
 5. **Authentication → URL Configuration** এ আপনার Vercel ডোমেইন (ডিপ্লয় করার পর) যোগ করুন Redirect URLs-এ
 
 ---

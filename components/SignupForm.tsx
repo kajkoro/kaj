@@ -14,6 +14,7 @@ export default function SignupForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [confirmationSent, setConfirmationSent] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -32,21 +33,21 @@ export default function SignupForm() {
       return;
     }
 
-    if (data.user) {
-      // create the profile row
-      const { error: profileError } = await supabase.from("profiles").insert({
-        id: data.user.id,
-        full_name: fullName,
-        role: "buyer",
-      });
-      if (profileError) {
-        setError(profileError.message);
-        setLoading(false);
-        return;
-      }
+    // The profiles row is created automatically by a database trigger
+    // (see supabase/migrations/003_auto_create_profile.sql) — no need
+    // to insert it from the client, which avoids an RLS race condition
+    // when email confirmation is required and there's no session yet.
+
+    if (!data.session) {
+      // Email confirmation is required — no active session yet.
+      setError(null);
+      setLoading(false);
+      setConfirmationSent(true);
+      return;
     }
 
     router.push("/profile");
+    router.refresh();
   }
 
   return (
@@ -56,7 +57,21 @@ export default function SignupForm() {
         কাজ পোস্ট করতে অথবা কাজ খুঁজে আয় করতে — একটাই অ্যাকাউন্ট।
       </p>
 
-      <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+      {confirmationSent ? (
+        <div
+          className="mt-8 rounded-xl p-5 text-sm"
+          style={{ background: "var(--paper)", border: "1px solid var(--leaf)" }}
+        >
+          ✓ <strong>{email}</strong> এ একটা কনফার্মেশন ইমেইল পাঠানো হয়েছে। ইমেইলে থাকা লিংকে ক্লিক করে
+          অ্যাকাউন্ট নিশ্চিত করুন, তারপর{" "}
+          <Link href="/login" className="underline" style={{ color: "var(--cobalt)" }}>
+            লগইন করুন
+          </Link>
+          ।
+        </div>
+      ) : (
+        <>
+          <form onSubmit={handleSubmit} className="mt-8 space-y-4">
         <Field label="পূর্ণ নাম">
           <input
             required
@@ -109,6 +124,8 @@ export default function SignupForm() {
           লগইন করুন
         </Link>
       </p>
+        </>
+      )}
     </section>
   );
 }
