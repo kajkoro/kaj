@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { getContent, getSeo } from "@/lib/content";
 
-export const metadata = { title: "সাপোর্ট | কাজকরো" };
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeo("support");
+  return { title: seo.title, description: seo.description };
+}
 
 const FAQS = [
   {
@@ -25,12 +30,13 @@ const FAQS = [
   },
 ];
 
-export default function SupportPage() {
+export default async function SupportPage() {
+  const content = await getContent(["support_intro"]);
   return (
     <section className="mx-auto max-w-2xl px-5 py-14">
       <h1 className="display text-3xl font-bold">সাপোর্ট</h1>
       <p className="mt-2 text-sm" style={{ color: "#6b665c" }}>
-        সচরাচর জিজ্ঞাসিত প্রশ্ন। নিচে উত্তর না পেলে সরাসরি{" "}
+        {content.support_intro}{" "}
         <Link href="/contact" className="underline" style={{ color: "var(--cobalt)" }}>
           যোগাযোগ করুন
         </Link>

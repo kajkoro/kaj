@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import WorkerCard from "@/components/WorkerCard";
 import { AREAS } from "@/lib/types";
 import Link from "next/link";
+import { getSeo } from "@/lib/content";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeo("workers");
+  return { title: seo.title, description: seo.description };
+}
 
 export default async function WorkersPage({
   searchParams,

@@ -3,6 +3,7 @@ import { Hind_Siliguri, Noto_Sans_Bengali, Space_Grotesk } from "next/font/googl
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PageViewTracker from "@/components/PageViewTracker";
 
 const hindSiliguri = Hind_Siliguri({
   variable: "--font-hind-siliguri",
@@ -37,6 +38,7 @@ export default function RootLayout({
         className={`${hindSiliguri.variable} ${notoBengali.variable} ${spaceGrotesk.variable} antialiased`}
       >
         <div className="rickshaw-strip" />
+        <PageViewTracker />
         <Navbar />
         <main>{children}</main>
         <Footer />

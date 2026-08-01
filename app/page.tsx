@@ -1,7 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ShieldCheck, Clock, Wallet, ArrowRight } from "lucide-react";
+import { getContent, getSeo } from "@/lib/content";
 
-export default function Home() {
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeo("home");
+  return { title: seo.title, description: seo.description };
+}
+
+export default async function Home() {
+  const content = await getContent(["home_hero_subtitle", "home_who_for_text", "home_safety_text"]);
   return (
     <>
       {/* Hero */}
@@ -20,9 +28,7 @@ export default function Home() {
               নিজের রেটে।
             </h1>
             <p className="mt-6 max-w-md text-lg" style={{ color: "#4a4640" }}>
-              সাদিয়ার বাসার কিচেন পরিষ্কার দরকার, দুই ঘণ্টার জন্য। আফরিন
-              ধানমন্ডিতেই থাকে, ভার্সিটিতে পড়ে, সময় বের করতে পারে। কাজকরো
-              দুজনকে মেলায় — নিরাপদে, স্বচ্ছভাবে।
+              {content.home_hero_subtitle}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
@@ -125,10 +131,7 @@ export default function Home() {
             যাদের জন্য কাজকরো
           </h2>
           <p className="mt-4 max-w-2xl" style={{ color: "#4a4640" }}>
-            যারা ভার্সিটিতে পড়ছেন, টিউশনি পাচ্ছেন না, চাকরি খুঁজছেন কিন্তু এখনো পাননি, অথবা মাসের মাঝামাঝি
-            হাতখরচ শেষ হয়ে যায় — নিজের সময়মতো, নিজের এলাকায়, ছোট ছোট কাজ করে সৎভাবে আয় করার একটা জায়গা।
-            কাজকে ছোট করে দেখার সংস্কৃতি বদলাতে চাই আমরা — একটা পরিষ্কার বাথরুম, একটা গোছানো কিচেন, একজনের
-            হাতে-বানানো রান্না — এগুলো সম্মানের কাজ, লজ্জার না।
+            {content.home_who_for_text}
           </p>
 
           <div className="mt-10 grid gap-6 sm:grid-cols-3">
@@ -143,8 +146,7 @@ export default function Home() {
       <section className="mx-auto max-w-6xl px-5 py-20">
         <h2 className="display text-3xl font-bold">নিরাপত্তা আমাদের অগ্রাধিকার</h2>
         <p className="mt-3 max-w-2xl text-sm" style={{ color: "#6b665c" }}>
-          একটা অচেনা মানুষকে বাসায় ঢুকতে দেওয়া বা অচেনা বাসায় কাজ করতে যাওয়া — দুটোই ভরসার ব্যাপার। তাই
-          আমরা শুধু ম্যাচমেকিং না, নিরাপত্তার অবকাঠামো তৈরিতেও বিনিয়োগ করছি।
+          {content.home_safety_text}
         </p>
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <SafetyItem title="NID ভেরিফিকেশন" desc="প্রতিটি প্রোফাইল পরিচয়পত্র যাচাই করে অনুমোদিত হয়।" />

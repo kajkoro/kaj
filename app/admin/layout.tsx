@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { LayoutDashboard, Users, Briefcase, Tags, Settings, MessageSquare, ExternalLink } from "lucide-react";
+import { LayoutDashboard, Users, Briefcase, Tags, Settings, MessageSquare, ExternalLink, FileText, Search, BarChart3 } from "lucide-react";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -24,9 +24,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   const navItems = [
     { href: "/admin", label: "ড্যাশবোর্ড", icon: LayoutDashboard },
+    { href: "/admin/analytics", label: "অ্যানালিটিক্স", icon: BarChart3 },
     { href: "/admin/users", label: "ইউজার", icon: Users },
     { href: "/admin/jobs", label: "কাজসমূহ", icon: Briefcase },
     { href: "/admin/skills", label: "স্কিল ক্যাটাগরি", icon: Tags },
+    { href: "/admin/content", label: "পেজ কনটেন্ট", icon: FileText },
+    { href: "/admin/seo", label: "এসইও", icon: Search },
     { href: "/admin/support", label: "সাপোর্ট মেসেজ", icon: MessageSquare },
     { href: "/admin/settings", label: "সাইট সেটিংস", icon: Settings },
   ];
