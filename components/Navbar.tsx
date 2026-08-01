@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function Navbar() {
@@ -6,6 +7,16 @@ export default async function Navbar() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  let isAdmin = false;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("is_admin")
+      .eq("id", user.id)
+      .single();
+    isAdmin = !!profile?.is_admin;
+  }
 
   return (
     <header className="border-b" style={{ borderColor: "var(--line)" }}>
@@ -25,6 +36,16 @@ export default async function Navbar() {
           <Link href="/jobs/new" className="hover:opacity-70">
             কাজ পোস্ট করুন
           </Link>
+
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className="flex items-center gap-1.5 rounded-full px-4 py-1.5 text-white"
+              style={{ background: "var(--vermillion)" }}
+            >
+              <ShieldCheck size={14} /> অ্যাডমিন প্যানেল
+            </Link>
+          )}
 
           {user ? (
             <Link
