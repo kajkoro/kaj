@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Hind_Siliguri, Noto_Sans_Bengali, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const hindSiliguri = Hind_Siliguri({
   variable: "--font-hind-siliguri",
@@ -38,6 +39,7 @@ export default function RootLayout({
         <div className="rickshaw-strip" />
         <Navbar />
         <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );

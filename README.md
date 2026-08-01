@@ -23,6 +23,13 @@ npm run dev
 1. [supabase.com](https://supabase.com) এ গিয়ে ফ্রি একটা প্রজেক্ট তৈরি করুন
 2. **Project Settings → API** থেকে `Project URL` এবং `anon public` key কপি করে `.env.local`-এ বসান
 3. **SQL Editor** এ গিয়ে `supabase/schema.sql` ফাইলের পুরো কনটেন্ট পেস্ট করে Run করুন — এটা সব টেবিল, RLS পলিসি, এবং প্রি-লোডেড কাজের ক্যাটাগরি (কিচেন পরিষ্কার, রান্না, টিউশন ইত্যাদি) তৈরি করে দেবে
+3ক. এরপর **নতুন query** খুলে `supabase/migrations/002_admin_and_settings.sql` পেস্ট করে Run করুন — এটা অ্যাডমিন রোল, সাইট সেটিংস, অডিট লগ, ও সাপোর্ট মেসেজ টেবিল তৈরি করবে
+3খ. **নিজেকে অ্যাডমিন বানান:** প্রথমে সাইটে সাইন আপ করে একটা অ্যাকাউন্ট বানান, তারপর SQL Editor-এ এটা রান করুন (আপনার ইমেইল দিয়ে):
+   ```sql
+   update profiles set is_admin = true
+   where id = (select id from auth.users where email = 'you@example.com');
+   ```
+   এরপর `/admin` এ গিয়ে অ্যাডমিন প্যানেল দেখতে পাবেন।
 4. **Authentication → Providers** এ Email প্রোভাইডার এনাবল আছে কিনা কনফার্ম করুন (ডিফল্টে থাকে)
 5. **Authentication → URL Configuration** এ আপনার Vercel ডোমেইন (ডিপ্লয় করার পর) যোগ করুন Redirect URLs-এ
 
@@ -58,6 +65,8 @@ git push -u origin main
 - ✅ বিড অ্যাক্সেপ্ট করে ওয়ার্কার নিয়োগ
 - ✅ রেটিং/রিভিউ ডেটা মডেল (schema তৈরি, UI এখনো বাকি)
 - ✅ Row Level Security — প্রতিটি টেবিলে ডেটা আইসোলেশন
+- ✅ **অ্যাডমিন প্যানেল** (`/admin`) — ড্যাশবোর্ড স্ট্যাটস, ইউজার ম্যানেজমেন্ট (NID ভেরিফাই/সাসপেন্ড), সব কাজ দেখা/স্ট্যাটাস বদলানো/মুছে ফেলা, স্কিল ক্যাটাগরি অ্যাড/ডিলিট, সাপোর্ট মেসেজ হ্যান্ডেল করা, কমিশন রেট ও সাইট সেটিংস পরিবর্তন, মেইনটেন্যান্স মোড
+- ✅ কমন পেজ — প্রাইভেসি পলিসি, টার্মস, ডিসক্লেইমার, সাপোর্ট (FAQ), যোগাযোগ (ফর্ম, ডেটাবেসে সেভ হয়, অ্যাডমিন প্যানেলে দেখা যায়)
 
 ## ৫. যা এখনো করতে হবে (গুরুত্ব অনুযায়ী সাজানো)
 
@@ -67,9 +76,9 @@ git push -u origin main
 2. **পেমেন্ট গেটওয়ে** (SSLCommerz/bKash Merchant API) — এখন পেমেন্ট শুধু `transactions` টেবিলে রেকর্ড হয়, actual gateway call নেই
 3. **রেটিং/রিভিউ UI** — schema আছে (ট্রিগারসহ rating average auto-update হয়), কিন্তু ফর্ম/ডিসপ্লে বাকি
 4. **রিয়েলটাইম বিড নোটিফিকেশন** — Supabase Realtime subscription যোগ করে বায়ারকে লাইভ বিড দেখানো যাবে
-5. **ইমেইল/SMS নোটিফিকেশন** (বিড এলে, অ্যাক্সেপ্ট হলে)
+5. **ইমেইল/SMS নোটিফিকেশন** (বিড এলে, অ্যাক্সেপ্ট হলে, সাপোর্ট মেসেজের রিপ্লাই)
 6. **ইমার্জেন্সি কন্টাক্ট + ইন-অ্যাপ চেক-ইন** UI (schema তে ফিল্ড আছে)
-7. **অ্যাডমিন প্যানেল** — ইউজার সাসপেন্ড করা, ডিসপিউট হ্যান্ডেল করা
+7. **সুপার-অ্যাডমিন বনাম সাধারণ অ্যাডমিন** — এখন যেকোনো `is_admin=true` ইউজার পুরো প্যানেল অ্যাক্সেস পায়, রোল-বেসড পারমিশন (যেমন শুধু সাপোর্ট দেখতে পারা, সেটিংস বদলাতে না পারা) ভবিষ্যতে যোগ করা যায়
 
 ## ৬. প্রজেক্ট স্ট্রাকচার
 
@@ -82,10 +91,22 @@ app/
   workers/page.tsx        → ওয়ার্কার ব্রাউজ
   profile/page.tsx        → প্রোফাইল সেটআপ (worker/buyer)
   login/, signup/         → অথেন্টিকেশন
-components/               → JobCard, WorkerCard, BidForm, AcceptBidButton, Navbar
+  admin/                   → অ্যাডমিন প্যানেল (layout.tsx-এ অ্যাক্সেস গার্ড)
+    page.tsx                → ড্যাশবোর্ড
+    users/page.tsx           → ইউজার ম্যানেজমেন্ট
+    jobs/page.tsx             → সব কাজ ম্যানেজমেন্ট
+    skills/page.tsx            → স্কিল ক্যাটাগরি ম্যানেজমেন্ট
+    support/page.tsx            → সাপোর্ট মেসেজ
+    settings/page.tsx            → সাইট সেটিংস (কমিশন, মেইনটেন্যান্স মোড)
+  privacy/, terms/, disclaimer/, support/, contact/  → কমন পেজ
+  maintenance/page.tsx     → মেইনটেন্যান্স মোড চালু থাকলে দেখানো পেজ
+components/               → JobCard, WorkerCard, BidForm, AcceptBidButton, Navbar, Footer
+  admin/                   → UserRow, AdminJobRow, SkillManager, SettingsForm, SupportMessageRow
 lib/supabase/             → browser + server Supabase ক্লায়েন্ট
 lib/types.ts               → শেয়ার্ড TypeScript টাইপ + এলাকার লিস্ট
-supabase/schema.sql         → সম্পূর্ণ ডেটাবেস স্কিমা + RLS পলিসি
+middleware.ts                → session refresh + মেইনটেন্যান্স মোড রিডাইরেক্ট
+supabase/schema.sql            → মূল ডেটাবেস স্কিমা + RLS পলিসি
+supabase/migrations/002_admin_and_settings.sql → অ্যাডমিন রোল, সাইট সেটিংস, অডিট লগ, সাপোর্ট মেসেজ
 ```
 
 ## ৭. ডিজাইন সিস্টেম

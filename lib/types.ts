@@ -12,6 +12,19 @@ export interface Profile {
   avatar_url: string | null;
   rating_avg: number;
   rating_count: number;
+  is_admin: boolean;
+  is_suspended: boolean;
+  suspended_reason: string | null;
+}
+
+export interface SiteSettings {
+  default_commission_pct: number;
+  min_commission_pct: number;
+  max_commission_pct: number;
+  site_name_bn: string;
+  support_email: string;
+  support_phone: string;
+  maintenance_mode: boolean;
 }
 
 export interface SkillCategory {

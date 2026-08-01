@@ -118,11 +118,71 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {/* Who this is for */}
+      <section className="border-y" style={{ borderColor: "var(--line)", background: "var(--paper)" }}>
+        <div className="mx-auto max-w-6xl px-5 py-20">
+          <h2 className="display max-w-2xl text-3xl font-bold">
+            যাদের জন্য কাজকরো
+          </h2>
+          <p className="mt-4 max-w-2xl" style={{ color: "#4a4640" }}>
+            যারা ভার্সিটিতে পড়ছেন, টিউশনি পাচ্ছেন না, চাকরি খুঁজছেন কিন্তু এখনো পাননি, অথবা মাসের মাঝামাঝি
+            হাতখরচ শেষ হয়ে যায় — নিজের সময়মতো, নিজের এলাকায়, ছোট ছোট কাজ করে সৎভাবে আয় করার একটা জায়গা।
+            কাজকে ছোট করে দেখার সংস্কৃতি বদলাতে চাই আমরা — একটা পরিষ্কার বাথরুম, একটা গোছানো কিচেন, একজনের
+            হাতে-বানানো রান্না — এগুলো সম্মানের কাজ, লজ্জার না।
+          </p>
+
+          <div className="mt-10 grid gap-6 sm:grid-cols-3">
+            <StatCard number="২০+" label="ধরনের কাজ তালিকাভুক্ত" />
+            <StatCard number="৫-১৫%" label="স্বচ্ছ কমিশন হার" />
+            <StatCard number="১৮-৩০" label="বছর বয়সীদের জন্য" />
+          </div>
+        </div>
+      </section>
+
+      {/* Safety commitment */}
+      <section className="mx-auto max-w-6xl px-5 py-20">
+        <h2 className="display text-3xl font-bold">নিরাপত্তা আমাদের অগ্রাধিকার</h2>
+        <p className="mt-3 max-w-2xl text-sm" style={{ color: "#6b665c" }}>
+          একটা অচেনা মানুষকে বাসায় ঢুকতে দেওয়া বা অচেনা বাসায় কাজ করতে যাওয়া — দুটোই ভরসার ব্যাপার। তাই
+          আমরা শুধু ম্যাচমেকিং না, নিরাপত্তার অবকাঠামো তৈরিতেও বিনিয়োগ করছি।
+        </p>
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <SafetyItem title="NID ভেরিফিকেশন" desc="প্রতিটি প্রোফাইল পরিচয়পত্র যাচাই করে অনুমোদিত হয়।" />
+          <SafetyItem title="রেটিং ও রিভিউ" desc="প্রতিটি কাজের পর দু'পক্ষই রেট করেন, ইতিহাস স্বচ্ছ থাকে।" />
+          <SafetyItem title="ইমার্জেন্সি কন্টাক্ট" desc="প্রতিটি ওয়ার্কার প্রোফাইলে জরুরি যোগাযোগের তথ্য থাকে।" />
+          <SafetyItem title="মানব-তদারকিত অভিযোগ" desc="কোনো সমস্যা হলে সরাসরি টিমের সাথে যোগাযোগের ব্যবস্থা আছে।" />
+        </div>
+      </section>
     </>
   );
 }
 
-function Feature({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
+function StatCard({ number, label }: { number: string; label: string }) {
+  return (
+    <div className="ticket p-5 text-center">
+      <p className="mono-ui text-3xl font-bold" style={{ color: "var(--cobalt)" }}>
+        {number}
+      </p>
+      <p className="mt-1 text-sm" style={{ color: "#6b665c" }}>
+        {label}
+      </p>
+    </div>
+  );
+}
+
+function SafetyItem({ title, desc }: { title: string; desc: string }) {
+  return (
+    <div className="rounded-xl border p-4" style={{ borderColor: "var(--line)" }}>
+      <p className="font-semibold">{title}</p>
+      <p className="mt-1 text-sm" style={{ color: "#6b665c" }}>
+        {desc}
+      </p>
+    </div>
+  );
+}
+
+function Feature({
+ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
   return (
     <div className="flex gap-4">
       <div className="shrink-0">{icon}</div>
